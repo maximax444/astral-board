@@ -5,11 +5,13 @@ const cors = require('cors')
 
 const db = require("./config/db")
 const router = require('./routes/index')
+const loginRouter = require('./routes/authRouter')
 const sequelize = require('./config/db')
 
 app.use(cors())
 app.use(express.json())
 app.use('/api', router)
+app.use('/login', loginRouter)
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'helo' })
 })
