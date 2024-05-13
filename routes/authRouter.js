@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
 const Router = require('express')
 const router = new Router()
+const options = require("../options")
+
 
 
 
 const generateAccessToken = (user) => {
-    return jwt.sign(user, "asdasadfdaasdafDAFSFD", { expiresIn: '222230s' });
+    return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
 }
 
 

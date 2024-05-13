@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const options = require("../options")
 const authenticateToken = (req, res, next) => {
     // getting the authorization information
     const authHeader = req.headers['authorization'];
@@ -9,7 +10,7 @@ const authenticateToken = (req, res, next) => {
 
     // verify if there is a user corrosponding to the token found in the 
     // authorization header.
-    jwt.verify(token, "asdasadfdaasdafDAFSFD", (err, user) => {
+    jwt.verify(token, options.TOKEN, (err, user) => {
         console.log(err);
         if (err) return res.sendStatus(403); // The token is there but it's not valid;
         // if the token is valid, i.e the user is present, then in the request we are 
