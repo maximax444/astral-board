@@ -17,7 +17,6 @@ router.post('/', (req, res) => {
 
     let { email, password } = req.body
     const user = { name: email };
-
     const accessToken = generateAccessToken(user);
     res.json(accessToken);
 
