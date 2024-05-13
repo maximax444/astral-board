@@ -1,6 +1,13 @@
 const { Users } = require('../entity/Users')
+const jwt = require('jsonwebtoken');
+const options = require("../options");
+
+const generateAccessToken = (user) => {
+    return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
+}
 
 class UsersController {
+    
     async create(req, res, next) {
         try {
 
@@ -23,6 +30,22 @@ class UsersController {
         try {
             let users = await Users.findAll()
             return res.json(users)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async login(req, res) {
+        try {
+            let { email, password } = req.body
+            const user = { name: email };
+            const us = await Users.findOne({ where: { email: email } })
+            if (us) {
+                const accessToken = generateAccessToken(user);
+                res.json(accessToken);
+            } else {
+                res.status(404).send({message: "Пользователь не найден!"})
+            }
         } catch (e) {
             console.log(e)
         }
