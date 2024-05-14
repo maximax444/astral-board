@@ -41,8 +41,12 @@ class UsersController {
             const user = { name: email };
             const us = await Users.findOne({ where: { email: email } })
             if (us) {
-                const accessToken = generateAccessToken(user);
-                res.json(accessToken);
+                if (us.dataValues.password == password) {
+                    const accessToken = generateAccessToken(user);
+                    res.json(accessToken);
+                } else {
+                    res.status(403).send({message: "Неверный пароль!"})
+                }
             } else {
                 res.status(404).send({message: "Пользователь не найден!"})
             }
