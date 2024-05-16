@@ -13,7 +13,7 @@ class CategoriesController {
     async create(req, res, next) {
         try {
             let { title, slug } = req.body
-            
+
             let cat = await Categories.create({
                 title: title,
                 slug: slug
@@ -43,7 +43,7 @@ class CategoriesController {
 
     async delete(req, res) {
         try {
-            let cat = await Categories.destroy({ where: { id: id } })
+            let cat = await Categories.destroy({ where: { id: req.params.catId } })
             return res.json(cat)
         } catch (e) {
             console.log(e)
