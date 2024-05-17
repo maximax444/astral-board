@@ -11,6 +11,7 @@ const sequelize = require('./config/db')
 
 app.use(cors())
 app.use(express.json())
+app.use("/uploads", express.static("uploads"))
 app.use('/api', router)
 app.use('/login', loginRouter)
 app.use('/setup', setupRouter)

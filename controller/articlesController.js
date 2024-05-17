@@ -2,6 +2,8 @@ const { Pages } = require('../entity/Pages')
 const jwt = require('jsonwebtoken');
 const options = require("../options");
 const { log } = require('console');
+const { Articles } = require('../entity/Articles');
+const { Categories } = require('../entity/Categories');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
@@ -11,25 +13,20 @@ class ArticlesController {
 
     async create(req, res, next) {
         try {
-            let { title, slug, parent_id } = req.body
-            let currPath = "/" + slug;
-            if (parent_id != -1) {
-                const currPageSlug = await getPageById(parent_id);
-                if (currPageSlug == "/") {
-                    console.log("asd");
-                    currPath = currPageSlug + slug;
-                } else {
-                    currPath = currPageSlug + "/" + slug;
-                }
-            }
-            let page = await Pages.create({
-                title: title,
-                slug: slug,
-                parent_id: parent_id,
-                path: currPath
-            });
+            console.log(req.body);
+            let { title, descr, slug, category_id } = req.body
 
-            return res.json(page)
+            let cat = await Categories.findOne({ where: { id: category_id } })
+            console.log(req.file);
+            let art = await Articles.create({
+                title: title,
+                descr: descr,
+                slug: slug,
+                articleImg: req.file.path
+            })
+
+            art.setCategory(cat)
+            return res.json(art)
         } catch (e) {
             console.log(e)
         }
@@ -38,8 +35,15 @@ class ArticlesController {
 
     async getAll(req, res) {
         try {
-            let pages = await Pages.findAll()
-            return res.json(pages)
+            let articles = await Articles.findAll({
+                include: [
+                    {
+                        model: Categories,
+                        as: 'Category' // <--------- Here is the magic
+                    }
+                ]
+            })
+            return res.json(articles)
         } catch (e) {
             console.log(e)
         }
