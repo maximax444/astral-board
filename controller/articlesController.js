@@ -68,17 +68,24 @@ class ArticlesController {
     //         console.log(e)
     //     }
     // }
+    async delete(req, res) {
+        try {
+            let art = await Articles.destroy({ where: { id: req.params.artId } })
+            return res.json(art)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
-    // async getOne(req, res) {
-    //     const {id} = req.params
-    //     const device = await Device.findOne(
-    //         {
-    //             where: {id},
-    //             include: [{model: DeviceInfo, as: 'info'}]
-    //         },
-    //     )
-    //     return res.json(device)
-    // }
+    async getOne(req, res) {
+        try {
+            let art = await Articles.findOne({ where: { id: req.params.artId } })
+            console.log(art);
+            return res.json(art)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports = new ArticlesController()
