@@ -33,6 +33,29 @@ class ArticlesController {
 
     }
 
+    async update(req, res, next) {
+        try {
+            let { id, title, descr, slug, text, category_id } = req.body
+
+            let cat = await Categories.findOne({ where: { id: category_id } })
+
+            let art = await Articles.findOne({ where: { id: id } })
+            if (req.file) {
+                art.articleImg = req.file.path
+            }
+            art.title = title
+            art.descr = descr
+            art.slug = slug
+            art.setCategory(cat)
+            art.text = text
+            art.save()
+            return res.json(art)
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
     async getAll(req, res) {
         try {
             let articles = await Articles.findAll({
@@ -79,7 +102,15 @@ class ArticlesController {
 
     async getOne(req, res) {
         try {
-            let art = await Articles.findOne({ where: { id: req.params.artId } })
+            let art = await Articles.findOne({
+                where: { id: req.params.artId },
+                include: [
+                    {
+                        model: Categories,
+                        as: 'Category' // <--------- Here is the magic
+                    }
+                ]
+            })
             console.log(art);
             return res.json(art)
         } catch (e) {
