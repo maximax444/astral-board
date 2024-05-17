@@ -8,23 +8,27 @@ const generateAccessToken = (user) => {
 
 class SettingsController {
 
-    // async create(req, res, next) {
-    //     try {
+    async create(req, res, next) {
+        try {
 
-    //         let { name1, name2, email, password } = req.body
-    //         let user = await Users.create({
-    //             first_name: name1,
-    //             surname: name2,
-    //             email: email,
-    //             password: password
-    //         });
+            let { title, descr, slug, val } = req.body
+            let prevSet = await Settings.findOne({where: {slug:slug}})
+            if (prevSet) {
+                return res.status(404).send({message: "Настройка с таким slug уже существует!"})
+            }
+            let sett = await Settings.create({
+                title: title,
+                descr: descr,
+                slug: slug,
+                val: val
+            });
 
-    //         return res.json(user)
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
+            return res.json(sett)
+        } catch (e) {
+            console.log(e)
+        }
 
-    // }
+    }
 
     async update(req, res, next) {
         try {
