@@ -31,11 +31,55 @@ class FieldsController {
 
     }
 
+    async update(req, res) {
+        try {
+            let { id, title, descr, slug } = req.body
+
+            let field = await Fields.findOne({
+                where: { id: id }
+            })
+            let oldField = await Fields.findOne({
+                where: { slug: slug }
+            })
+            if (!oldField || oldField.id == field.id) {
+                field.title = title
+                field.descr = descr
+                field.slug = slug
+                field.save()
+                return res.json(field)
+            } else {
+                return res.status(404).send({ message: "Поле с таким slug уже существует!" })
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
     async getAll(req, res) {
         try {
             let fields = await Fields.findAll()
             return res.json(fields)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async delete(req, res) {
+        try {
+            let field = await Fields.destroy({ where: { id: req.params.fieldId } })
+            return res.json(field)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async getOne(req, res) {
+        try {
+            let field = await Fields.findOne({
+                where: { id: req.params.fieldId }
+            })
+            return res.json(field)
         } catch (e) {
             console.log(e)
         }
