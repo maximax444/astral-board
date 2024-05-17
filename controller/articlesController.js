@@ -71,26 +71,7 @@ class ArticlesController {
             console.log(e)
         }
     }
-
-    // async login(req, res) {
-    //     try {
-    //         let { email, password } = req.body
-    //         const user = { name: email };
-    //         const us = await Users.findOne({ where: { email: email } })
-    //         if (us) {
-    //             if (us.dataValues.password == password) {
-    //                 const accessToken = generateAccessToken(user);
-    //                 res.json(accessToken);
-    //             } else {
-    //                 res.status(403).send({message: "Неверный пароль!"})
-    //             }
-    //         } else {
-    //             res.status(404).send({message: "Пользователь не найден!"})
-    //         }
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
+    
     async delete(req, res) {
         try {
             let art = await Articles.destroy({ where: { id: req.params.artId } })

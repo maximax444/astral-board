@@ -8,6 +8,7 @@ const router = require('./routes/index')
 const loginRouter = require('./routes/authRouter')
 const setupRouter = require('./routes/setupRouter')
 const sequelize = require('./config/db')
+const { Settings } = require("./entity/Settings")
 
 app.use(cors())
 app.use(express.json())
@@ -24,6 +25,36 @@ const start = async () => {
 
         await sequelize.authenticate()
         await sequelize.sync({ alter: true })
+        Settings.findOne({ where: { slug: "title" } }).then((set1 => {
+            if (!set1) {
+                Settings.create({
+                    title: "Название сайта",
+                    descr: "Title",
+                    slug: "title",
+                    val: ""
+                })
+            }
+        }))
+        Settings.findOne({ where: { slug: "descr" } }).then((set2 => {
+            if (!set2) {
+                Settings.create({
+                    title: "Краткое описание",
+                    descr: "Description",
+                    slug: "descr",
+                    val: ""
+                })
+            }
+        }))
+        Settings.findOne({ where: { slug: "reading" } }).then((set3 => {
+            if (!set3) {
+                Settings.create({
+                    title: "Количество постов",
+                    descr: "Количество постов блога, выводящихся на странице",
+                    slug: "reading",
+                    val: "10"
+                })
+            }
+        }))
         app.listen(port, () => console.log('11'))
     } catch (e) {
         console.log(e)
