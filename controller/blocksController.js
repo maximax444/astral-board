@@ -1,4 +1,4 @@
-const { Settings } = require('../entity/Settings')
+const { Settings } = require('../entity/Settings');
 const jwt = require('jsonwebtoken');
 const options = require("../options");
 const { Blocks } = require('../entity/Blocks');
@@ -7,17 +7,17 @@ const { FieldsValues } = require('../entity/FieldsValues');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
-}
+};
 
 class BlocksController {
 
     async create(req, res, next) {
         try {
 
-            let { title, descr, slug } = req.body
-            let prevBlock = await Blocks.findOne({ where: { slug: slug } })
+            let { title, descr, slug } = req.body;
+            let prevBlock = await Blocks.findOne({ where: { slug: slug } });
             if (prevBlock) {
-                return res.status(404).send({ message: "Блок с таким slug уже существует!" })
+                return res.status(404).send({ message: "Блок с таким slug уже существует!" });
             }
             let block = await Blocks.create({
                 title: title,
@@ -25,37 +25,37 @@ class BlocksController {
                 slug: slug
             });
 
-            return res.json(block)
+            return res.json(block);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
 
     }
 
     async update(req, res, next) {
         try {
-            let { id, title, descr, slug, content } = req.body
-            let contForFront = content
+            let { id, title, descr, slug, content } = req.body;
+            let contForFront = content;
             let block = await Blocks.findOne({
                 where: { id: id }
-            })
+            });
             let oldBlock = await Blocks.findOne({
                 where: { slug: slug }
-            })
+            });
             if (!oldBlock || oldBlock.id == block.id) {
-                block.title = title
-                block.descr = descr
-                block.slug = slug
-                block.content = content
-                let reg = /{{{(.*?)}}}/gm
-                let fields = [...content.matchAll(reg)]
-                let fieldsRes = []
+                block.title = title;
+                block.descr = descr;
+                block.slug = slug;
+                block.content = content;
+                let reg = /{{{(.*?)}}}/gm;
+                let fields = [...content.matchAll(reg)];
+                let fieldsRes = [];
                 for (const el of fields) {
-                    let field = await Fields.findOne({ where: { slug: el[1] } })
+                    let field = await Fields.findOne({ where: { slug: el[1] } });
                     if (!field) {
-                        return res.status(404).send({ message: "Ведённого вами поля " + el[1] + " не существует существует!" })
+                        return res.status(404).send({ message: "Ведённого вами поля " + el[1] + " не существует существует!" });
                     } else {
-                        let fvOld = await FieldsValues.findOne({ where: { fieldId: field.id, blockId: id } })
+                        let fvOld = await FieldsValues.findOne({ where: { fieldId: field.id, blockId: id } });
                         console.log(!fvOld);
                         console.log("asd");
                         if (!fvOld) {
@@ -66,25 +66,25 @@ class BlocksController {
                                 blockId: id,
                                 fieldId: field.id,
                                 value: ""
-                            })
-                            contForFront = contForFront.replace(el[0], "")
+                            });
+                            contForFront = contForFront.replace(el[0], "");
                         } else {
-                            contForFront = contForFront.replace(el[0], fvOld.value)
-                            fieldsRes.push(fvOld.id)
+                            contForFront = contForFront.replace(el[0], fvOld.value);
+                            fieldsRes.push(fvOld.id);
                         }
                     }
                     console.log(el[1]);
                     console.log(fieldsRes);
                 }
-                block.frontend = contForFront
-                block.fields = fieldsRes.join(",")
-                block.save()
-                return res.json(block)
+                block.frontend = contForFront;
+                block.fields = fieldsRes.join(",");
+                block.save();
+                return res.json(block);
             } else {
-                return res.status(404).send({ message: "Блок с таким slug уже существует!" })
+                return res.status(404).send({ message: "Блок с таким slug уже существует!" });
             }
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -92,17 +92,17 @@ class BlocksController {
         try {
             let block = await Blocks.findOne({
                 where: { id: Object.entries(req.body)[0][1].blockId }
-            })
-            let contForFront = block.content
+            });
+            let contForFront = block.content;
             for (const el of Object.entries(req.body)) {
-                let obj = await FieldsValues.findOne({ where: { id: el[1].id } })
-                obj.value = el[1].value
-                contForFront = contForFront.replace("{{{" + el[1].slug + "}}}", el[1].value)
-                obj.save()
+                let obj = await FieldsValues.findOne({ where: { id: el[1].id } });
+                obj.value = el[1].value;
+                contForFront = contForFront.replace("{{{" + el[1].slug + "}}}", el[1].value);
+                obj.save();
             }
             console.log(contForFront);
-            block.frontend = contForFront
-            block.save()
+            block.frontend = contForFront;
+            block.save();
             // let cat = await Categories.findOne({ where: { id: category_id } })
 
             // let art = await Articles.findOne({ where: { id: id } })
@@ -115,36 +115,36 @@ class BlocksController {
             // art.setCategory(cat)
             // art.text = text
             // art.save()
-            return res.status(200).send({ message: "Успешно!" })
+            return res.status(200).send({ message: "Успешно!" });
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
     async getFields(req, res) {
         try {
-            let fieldsValues = await FieldsValues.findAll({ where: { blockId: req.params.blockId } })
-            return res.json(fieldsValues)
+            let fieldsValues = await FieldsValues.findAll({ where: { blockId: req.params.blockId } });
+            return res.json(fieldsValues);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
     async getAll(req, res) {
         try {
-            let blocks = await Blocks.findAll()
-            return res.json(blocks)
+            let blocks = await Blocks.findAll();
+            return res.json(blocks);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
     async delete(req, res) {
         try {
-            let block = await Blocks.destroy({ where: { id: req.params.blockId } })
-            return res.json(block)
+            let block = await Blocks.destroy({ where: { id: req.params.blockId } });
+            return res.json(block);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -152,12 +152,12 @@ class BlocksController {
         try {
             let block = await Blocks.findOne({
                 where: { id: req.params.blockId }
-            })
-            return res.json(block)
+            });
+            return res.json(block);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 }
 
-module.exports = new BlocksController()
+module.exports = new BlocksController();

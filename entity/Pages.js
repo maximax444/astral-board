@@ -1,5 +1,5 @@
-const sequelize = require('../config/db')
-const { DataTypes } = require('sequelize')
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
 
 const Pages = sequelize.define("Pages", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -8,8 +8,8 @@ const Pages = sequelize.define("Pages", {
     parent_id: { type: DataTypes.INTEGER },
     path: { type: DataTypes.STRING },
     text: { type: DataTypes.TEXT },
-})
+});
 
 module.exports = {
     Pages
-}
+};

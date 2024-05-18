@@ -1,28 +1,28 @@
-const { Pages } = require('../entity/Pages')
+const { Pages } = require('../entity/Pages');
 const jwt = require('jsonwebtoken');
 const options = require("../options");
 const { log } = require('console');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
-}
+};
 
 const getPageById = async (page_id) => {
     try {
 
-        let page = await Pages.findOne({ where: { id: Number(page_id) } })
-        return page.dataValues.path
+        let page = await Pages.findOne({ where: { id: Number(page_id) } });
+        return page.dataValues.path;
     } catch (e) {
-        console.log(e)
-        return ""
+        console.log(e);
+        return "";
     }
-}
+};
 
 class PagesController {
 
     async create(req, res, next) {
         try {
-            let { title, slug, parent_id } = req.body
+            let { title, slug, parent_id } = req.body;
             let currPath = "/" + slug;
             if (parent_id != -1) {
                 const currPageSlug = await getPageById(parent_id);
@@ -40,19 +40,19 @@ class PagesController {
                 path: currPath
             });
 
-            return res.json(page)
+            return res.json(page);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
 
     }
 
     async getAll(req, res) {
         try {
-            let pages = await Pages.findAll()
-            return res.json(pages)
+            let pages = await Pages.findAll();
+            return res.json(pages);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -76,16 +76,15 @@ class PagesController {
     //     }
     // }
 
-    // async getOne(req, res) {
-    //     const {id} = req.params
-    //     const device = await Device.findOne(
-    //         {
-    //             where: {id},
-    //             include: [{model: DeviceInfo, as: 'info'}]
-    //         },
-    //     )
-    //     return res.json(device)
-    // }
+    async getOne(req, res) {
+        const {id} = req.params;
+        const page = await Pages.findOne(
+            {
+                where: {id}
+            },
+        );
+        return res.json(page);
+    }
 }
 
-module.exports = new PagesController()
+module.exports = new PagesController();

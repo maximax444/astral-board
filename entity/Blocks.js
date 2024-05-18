@@ -1,5 +1,5 @@
-const sequelize = require('../config/db')
-const { DataTypes } = require('sequelize')
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
 
 const Blocks = sequelize.define("Blocks", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -10,7 +10,7 @@ const Blocks = sequelize.define("Blocks", {
     frontend: { type: DataTypes.TEXT },
     fields: { type: DataTypes.STRING }
 
-})
+});
 module.exports = {
     Blocks
-} 
+};

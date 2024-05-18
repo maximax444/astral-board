@@ -1,6 +1,6 @@
 
-const options = require("../options")
-const { Sequelize } = require('sequelize')
+const options = require("../options");
+const { Sequelize } = require('sequelize');
 
 module.exports = new Sequelize(
     options.DBNAME,
@@ -13,4 +13,4 @@ module.exports = new Sequelize(
         host: options.HOST,
         port: options.PORT
     }
-)
+);

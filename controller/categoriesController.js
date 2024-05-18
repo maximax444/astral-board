@@ -1,4 +1,4 @@
-const { Pages } = require('../entity/Pages')
+const { Pages } = require('../entity/Pages');
 const jwt = require('jsonwebtoken');
 const options = require("../options");
 const { log } = require('console');
@@ -6,56 +6,56 @@ const { Categories } = require('../entity/Categories');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
-}
+};
 
 class CategoriesController {
 
     async create(req, res, next) {
         try {
-            let { title, slug } = req.body
+            let { title, slug } = req.body;
 
             let cat = await Categories.create({
                 title: title,
                 slug: slug
             });
 
-            return res.json(cat)
+            return res.json(cat);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
 
     }
 
     async update(req, res, next) {
         try {
-            let { id, title, slug } = req.body
-            const cat = await Categories.findOne({ where: { id: id } })
-            cat.title = title
-            cat.slug = slug
+            let { id, title, slug } = req.body;
+            const cat = await Categories.findOne({ where: { id: id } });
+            cat.title = title;
+            cat.slug = slug;
             cat.save();
 
-            return res.json(cat)
+            return res.json(cat);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
 
     }
 
     async delete(req, res) {
         try {
-            let cat = await Categories.destroy({ where: { id: req.params.catId } })
-            return res.json(cat)
+            let cat = await Categories.destroy({ where: { id: req.params.catId } });
+            return res.json(cat);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
     async getAll(req, res) {
         try {
-            let cats = await Categories.findAll()
-            return res.json(cats)
+            let cats = await Categories.findAll();
+            return res.json(cats);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -91,4 +91,4 @@ class CategoriesController {
     // }
 }
 
-module.exports = new CategoriesController()
+module.exports = new CategoriesController();

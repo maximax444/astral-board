@@ -1,10 +1,10 @@
-const Router = require('express')
-const router = new Router()
+const Router = require('express');
+const router = new Router();
 
-const usersController = require('../controller/usersController')
-const authenticateToken = require('../config/token')
+const usersController = require('../controller/usersController');
+const authenticateToken = require('../config/token');
 
-router.get('/', authenticateToken, usersController.getAll)
-router.post('/add', usersController.create)
+router.get('/', authenticateToken, usersController.getAll);
+router.post('/add', usersController.create);
 
-module.exports = router
+module.exports = router;

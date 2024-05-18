@@ -1,6 +1,6 @@
-const sequelize = require('../config/db')
-const { DataTypes } = require('sequelize')
-const { Categories } = require('./Categories')
+const sequelize = require('../config/db');
+const { DataTypes } = require('sequelize');
+const { Categories } = require('./Categories');
 
 const Articles = sequelize.define("Articles", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -9,9 +9,9 @@ const Articles = sequelize.define("Articles", {
     slug: { type: DataTypes.STRING },
     text: { type: DataTypes.TEXT },
     articleImg: {type: DataTypes.STRING}
-})
-Articles.belongsTo(Categories)
-Categories.hasOne(Articles)
+});
+Articles.belongsTo(Categories);
+Categories.hasOne(Articles);
 module.exports = {
     Articles
-}
+};

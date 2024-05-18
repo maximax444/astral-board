@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const options = require("../options")
+const options = require("../options");
 const authenticateToken = (req, res, next) => {
     // getting the authorization information
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers.authorization;
     // In our case It's JWT authantication
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -18,6 +18,6 @@ const authenticateToken = (req, res, next) => {
         req.user = user.name;
         // proceeding to the next action controller.
         next();
-    })
-}
-module.exports = authenticateToken
+    });
+};
+module.exports = authenticateToken;
