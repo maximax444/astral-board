@@ -7,6 +7,7 @@ const Blocks = sequelize.define("Blocks", {
     descr: { type: DataTypes.STRING },
     slug: { type: DataTypes.STRING },
     content: { type: DataTypes.TEXT },
+    frontend: { type: DataTypes.TEXT },
     fields: { type: DataTypes.STRING }
 
 })
