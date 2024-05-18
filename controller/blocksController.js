@@ -1,29 +1,29 @@
 const { Settings } = require('../entity/Settings')
 const jwt = require('jsonwebtoken');
 const options = require("../options");
+const { Blocks } = require('../entity/Blocks');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, options.TOKEN, { expiresIn: '222230s' });
 }
 
-class SettingsController {
+class BlocksController {
 
     async create(req, res, next) {
         try {
 
-            let { title, descr, slug, val } = req.body
-            let prevSet = await Settings.findOne({where: {slug:slug}})
-            if (prevSet) {
-                return res.status(404).send({message: "Настройка с таким slug уже существует!"})
+            let { title, descr, slug } = req.body
+            let prevBlock = await Blocks.findOne({where: {slug:slug}})
+            if (prevBlock) {
+                return res.status(404).send({message: "Блок с таким slug уже существует!"})
             }
-            let sett = await Settings.create({
+            let block = await Blocks.create({
                 title: title,
                 descr: descr,
-                slug: slug,
-                val: val
+                slug: slug
             });
 
-            return res.json(sett)
+            return res.json(block)
         } catch (e) {
             console.log(e)
         }
@@ -60,12 +60,12 @@ class SettingsController {
     }
     async getAll(req, res) {
         try {
-            let sets = await Settings.findAll()
-            return res.json(sets)
+            let blocks = await Blocks.findAll()
+            return res.json(blocks)
         } catch (e) {
             console.log(e)
         }
     }
 }
 
-module.exports = new SettingsController()
+module.exports = new BlocksController()

@@ -51,7 +51,7 @@ class FieldsController {
                 return res.status(404).send({ message: "Поле с таким slug уже существует!" })
             }
         } catch (e) {
-            console.log(e)
+            console.log(e) 
         }
     }
 
