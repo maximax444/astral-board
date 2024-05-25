@@ -7,7 +7,7 @@ const Pages = sequelize.define("Pages", {
     slug: { type: DataTypes.STRING },
     parent_id: { type: DataTypes.INTEGER },
     path: { type: DataTypes.STRING },
-    text: { type: DataTypes.TEXT },
+    blocks: { type: DataTypes.STRING },
 });
 
 module.exports = {

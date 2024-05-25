@@ -103,18 +103,6 @@ class BlocksController {
             console.log(contForFront);
             block.frontend = contForFront;
             block.save();
-            // let cat = await Categories.findOne({ where: { id: category_id } })
-
-            // let art = await Articles.findOne({ where: { id: id } })
-            // if (req.file) {
-            //     art.articleImg = req.file.path
-            // }
-            // art.title = title
-            // art.descr = descr
-            // art.slug = slug
-            // art.setCategory(cat)
-            // art.text = text
-            // art.save()
             return res.status(200).send({ message: "Успешно!" });
         } catch (e) {
             console.log(e);

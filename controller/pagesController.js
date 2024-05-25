@@ -47,6 +47,29 @@ class PagesController {
 
     }
 
+    async update(req, res, next) {
+        try {
+            let { id, title, slug, blocks } = req.body;
+            console.log(blocks);
+            let page = await Pages.findOne({
+                where: { id: id }
+            });
+            page.title = title;
+            page.slug = slug;
+            let bls = [];
+            for (const bl of blocks) {
+                bls.push(bl.id);
+            }
+            console.log(bls);
+            page.blocks = bls.join(",");
+            page.save();
+            return res.json(page);
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
     async getAll(req, res) {
         try {
             let pages = await Pages.findAll();
@@ -56,6 +79,15 @@ class PagesController {
         }
     }
 
+
+    async delete(req, res) {
+        try {
+            let page = await Pages.destroy({ where: { id: req.params.pageId } });
+            return res.json(page);
+        } catch (e) {
+            console.log(e);
+        }
+    }
     // async login(req, res) {
     //     try {
     //         let { email, password } = req.body
@@ -77,10 +109,10 @@ class PagesController {
     // }
 
     async getOne(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         const page = await Pages.findOne(
             {
-                where: {id}
+                where: { id }
             },
         );
         return res.json(page);
