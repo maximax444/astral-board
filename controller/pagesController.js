@@ -1,4 +1,5 @@
 const { Pages } = require('../entity/Pages');
+const { Blocks } = require('../entity/Blocks');
 const jwt = require('jsonwebtoken');
 const options = require("../options");
 const { log } = require('console');
@@ -57,11 +58,14 @@ class PagesController {
             page.title = title;
             page.slug = slug;
             let bls = [];
+            let frontend = "";
             for (const bl of blocks) {
                 bls.push(bl.id);
+                frontend += bl.frontend;
             }
             console.log(bls);
             page.blocks = bls.join(",");
+            page.frontend = frontend;
             page.save();
             return res.json(page);
         } catch (e) {
